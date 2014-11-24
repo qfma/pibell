@@ -20,12 +20,16 @@ class Sim900(object):
         self._tty = tty
         self._beaups = beaups
         self._timout = timeout
-        self.serialport = self.init_modem(tty, beaups, timeout)
 
-    def init_modem(self, tty, beaups, timout):
+        self.init_modem(tty, beaups, timeout)
+
+
+    def init_modem(self, tty, beaups, timeout):
         """Initialises the connection to the modem via a serialport"""
-        serialport = serial.Serial(tty, beaups, timout)
+        serialport = serial.Serial(tty, beaups, timeout=timeout)
 
-        response = serialport.write("AT\r".encode())
-        print(response)
+        serialport.write("AT\r".encode())
+        response = serialport.readlines(None)
+        if response[-1].decode().strip() != "OK":
+            raise ValueError("Connection to modem could not be established!")
         self.serialport = serialport
