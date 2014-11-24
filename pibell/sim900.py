@@ -33,3 +33,13 @@ class Sim900(object):
         if response[-1].decode().strip() != "OK":
             raise ValueError("Connection to modem could not be established!")
         self.serialport = serialport
+    
+    def call(self, number="07761030352"):
+        
+        call_command = "ATD " + str(number) + ";\r"
+        print("Calling " + str(number))
+        self.serialport.write(call_command.encode())
+        response = self.serialport.readlines(None)
+        if response[-1].decode().strip() != "OK":
+            raise ValueError("Phonecall failed!")
+
