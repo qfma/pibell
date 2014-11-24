@@ -28,6 +28,8 @@ class Sim900(object):
         """Initialises the connection to the modem via a serialport"""
         serialport = serial.Serial(tty, beaups, timeout=timeout)
 
-        response = serialport.write("AT\r".encode())
-        # print(response)
+        serialport.write("AT\r".encode())
+        response = serialport.readlines(None)
+        if response[-1].decode().strip() != "OK":
+            raise ValueError("Connection to modem could not be established!")
         self.serialport = serialport
