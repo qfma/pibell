@@ -34,7 +34,7 @@ class Sim900(object):
             raise ValueError("Connection to modem could not be established!")
         self.serialport = serialport
     
-    def call(self, number="07761030352"):
+    def call(self, number):
         
         call_command = "ATD " + str(number) + ";\r"
         print("Calling " + str(number))
