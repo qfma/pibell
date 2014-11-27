@@ -26,20 +26,23 @@ class Sim900(object):
 
     def init_modem(self, tty, beaups, timeout):
         """Initialises the connection to the modem via a serialport"""
-        serialport = serial.Serial(tty, beaups, timeout=timeout)
 
+        serialport = serial.Serial(tty, beaups, timeout=timeout)
         serialport.write("AT\r".encode())
         response = serialport.readlines(None)
-        if response[-1].decode().strip() != "OK":
+
+        if response[-1].decode().strip() == "ERROR":
             raise ValueError("Connection to modem could not be established!")
+
         self.serialport = serialport
-    
+
     def call(self, number):
-        
+
         call_command = "ATD " + str(number) + ";\r"
         print("Calling " + str(number))
+
         self.serialport.write(call_command.encode())
         response = self.serialport.readlines(None)
-        if response[-1].decode().strip() != "OK":
+        if response[-1].decode().strip() == "ERROR":
             raise ValueError("Phonecall failed!")
 
